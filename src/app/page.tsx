@@ -1,65 +1,952 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState } from "react";
+import Link from "next/link";
+import { ParallaxElement, HeroParallaxBackground, ProcessParallaxCard } from "@/components/ParallaxElement";
+import {
+  ArrowRight,
+  Award,
+  Shield,
+  Globe,
+  Sparkles,
+  ChevronDown,
+  ChevronUp,
+  Cpu,
+  Layers,
+  Scissors,
+  Shirt,
+  Printer,
+  Palette,
+  Package,
+  Camera,
+  CheckCircle2,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  ThumbsUp,
+  Clock,
+  UserCheck,
+  Percent,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import ScrollReveal from "@/components/ScrollReveal";
+import StatCounter from "@/components/StatCounter";
+import ParallaxImage from "@/components/ParallaxImage";
+import ConsultationModal from "@/components/ConsultationModal";
+
+// Trust stats
+const TRUST_STATS = [
+  { end: 15, suffix: "M+", label: "Pieces Manufactured" },
+  { end: 25, suffix: "+", label: "Countries Served" },
+  { end: 120, suffix: "+", label: "Brands Partnered" },
+  { end: 22, suffix: "+", label: "Years of Experience" },
+];
+
+// Services
+const SERVICES = [
+  {
+    icon: <Cpu className="w-5 h-5 text-brand-accent" />,
+    title: "Custom Manufacturing",
+    desc: "End-to-end knitwear production, custom cutting and sewing patterns designed for your retail specifications.",
+    image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Layers className="w-5 h-5 text-brand-accent" />,
+    title: "Fabric Sourcing",
+    desc: "Direct mill relationships for custom yarn counts, organic cotton, bamboo fibers, and sustainable blends.",
+    image: "https://images.unsplash.com/photo-1604176354204-9268737828e4?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Scissors className="w-5 h-5 text-brand-accent" />,
+    title: "Pattern Making",
+    desc: "Digital 2D/3D CAD patterns with precise measurements to optimize sizing fits and fabric yields.",
+    image: "https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Shirt className="w-5 h-5 text-brand-accent" />,
+    title: "Sampling",
+    desc: "Rapid prototyping and fit sample development, delivering sealed PP counters within 7-10 business days.",
+    image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Printer className="w-5 h-5 text-brand-accent" />,
+    title: "DTF Printing",
+    desc: "Direct-to-Film high-resolution transfers offering stretchability and wash durability for streetwear.",
+    image: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Palette className="w-5 h-5 text-brand-accent" />,
+    title: "Screen Printing",
+    desc: "Water-based ink prints, plastisol, puff, high-density, discharge, and premium retail finishes.",
+    image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Sparkles className="w-5 h-5 text-brand-accent" />,
+    title: "Embroidery",
+    desc: "Computerized multi-head embroidery, chenille patches, felt applications, and premium thread logos.",
+    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Palette className="w-5 h-5 text-brand-accent" />,
+    title: "Garment Dye",
+    desc: "Eco-certified reactive dyeing, pigment dyeing, tie-dye, cold dye, and enzyme washes.",
+    image: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <CheckCircle2 className="w-5 h-5 text-brand-accent" />,
+    title: "Finishing",
+    desc: "Heavy steam pressing, thread trimming, metal detection gates, and final AQL 1.5 audits.",
+    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Package className="w-5 h-5 text-brand-accent" />,
+    title: "Packaging",
+    desc: "Retail-ready tags, UPC barcode labels, price tickets, custom fold templates, and recycled polybags.",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Award className="w-5 h-5 text-brand-accent" />,
+    title: "Branding",
+    desc: "Custom satin neck labels, tear-away tags, high-density transfer labels, and cardboard paper hangtags.",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Palette className="w-5 h-5 text-brand-accent" />,
+    title: "Graphic Design",
+    desc: "Tech-pack preparation, CAD mockup illustration, artwork vectorization, and placement prints setup.",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Camera className="w-5 h-5 text-brand-accent" />,
+    title: "Product Photography",
+    desc: "Studio flat-lays, ghost mannequin catalog shoots, and lifestyle apparel photography for your website launch.",
+    image: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    icon: <Globe className="w-5 h-5 text-brand-accent" />,
+    title: "Worldwide Shipping",
+    desc: "Sea freight via Tuticorin/Chennai, air freight via Bangalore, custom clearances, and door-to-door forwarding.",
+    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800",
+  },
+];
+
+// Timeline steps
+const PROCESS_STEPS = [
+  {
+    num: "01",
+    title: "Consultation",
+    desc: "Initial program review, fabric alignment, costing sheets, and target lead-time planning.",
+  },
+  {
+    num: "02",
+    title: "Tech Pack Review",
+    desc: "Sizing specs and pattern vector files are verified by our CAD masters for production yields.",
+  },
+  {
+    num: "03",
+    title: "Sampling & Approvals",
+    desc: "Knitting lab dips, fit counters, and sample fabrication. Physical sign-off prior to bulk operations.",
+  },
+  {
+    num: "04",
+    title: "Bulk Production",
+    desc: "Linear fabric relaxation, computerized lay cutting, sewing line assembly, and inline verification.",
+  },
+  {
+    num: "05",
+    title: "Quality Inspection",
+    desc: "Stitch count audits, measurement checks, garment safety checks, and dual metal-detector scans.",
+  },
+  {
+    num: "06",
+    title: "Packaging",
+    desc: "Steam iron press, customized label tagging, fold layouts, and recycled carton packing.",
+  },
+  {
+    num: "07",
+    title: "Shipping",
+    desc: "Custom container consolidation, port logistics dispatch, and ocean/air bill of lading tracking.",
+  },
+];
+
+// Why choose us comparison cards
+const WHY_CHOOSE_US = [
+  {
+    title: "Premium Quality",
+    desc: "All garments pass AQL 1.5 standards. Inline checkers inspect every single garment.",
+    icon: <Award className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Fast Production",
+    desc: "Optimized assembly workflows ensure bulk shipping dispatch within 45 to 60 days.",
+    icon: <Clock className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Dedicated Account Manager",
+    desc: "Direct communication with Tirupur coordinators. Weekly video reports on progress.",
+    icon: <UserCheck className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Worldwide Shipping",
+    desc: "Coordination with global freight shipping lines for reliable port arrival.",
+    icon: <Globe className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Low MOQ",
+    desc: "Base order sizes start from 1,000 pcs. concessions up to 500 pcs for eco blends.",
+    icon: <Percent className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Transparent Pricing",
+    desc: "Clean BOM cost breakdowns, no hidden raw-material surcharges, fixed contracts.",
+    icon: <ThumbsUp className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Quality Inspection",
+    desc: "Oeko-Tex Standard 100 chemical tests, needle-detection tunnel safety passes.",
+    icon: <Shield className="w-5 h-5 text-brand-accent" />,
+  },
+  {
+    title: "Timely Delivery",
+    desc: "Slick critical path tracking ensures we maintain 99.2% on-time container loading.",
+    icon: <Calendar className="w-5 h-5 text-brand-accent" />,
+  },
+];
+
+// Industries served
+const INDUSTRIES = [
+  {
+    title: "Fashion Brands",
+    desc: "Premium retail silhouettes, custom fits, and dynamic seasonal colorway collections.",
+    bgImage: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Streetwear Labels",
+    desc: "Heavyweight hoodies, oversized t-shirts, drop-shoulder fleece, and high-density printing.",
+    bgImage: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Luxury Clothing",
+    desc: "Fine bamboo cotton blends, silk handfeel finishes, herbal dyeing, and minimalist designs.",
+    bgImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Sportswear",
+    desc: "Interlock mock-mesh, high-stretch elastane blends, flatlock sewing, and moisture-wicking yarns.",
+    bgImage: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Corporate Uniforms",
+    desc: "Classic combed cotton pique polos, durable rib collars, embroidery badges, and wash-resistant dyes.",
+    bgImage: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Kids Wear",
+    desc: "Ultra-soft GOTS certified organic rompers, Nickel-free snaps, and safe water-based prints.",
+    bgImage: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Women Wear",
+    desc: "Lightweight slub t-shirts, crop fleece, knit loungesets, and tailored female silhouettes.",
+    bgImage: "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Private Labels",
+    desc: "Tear-away collar support, custom barcode tagging, custom packaging, and complete retail presentation.",
+    bgImage: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800",
+  },
+];
+
+// Featured Projects
+const PORTFOLIO_PROJECTS = [
+  {
+    title: "Nature Polo Organic Collection",
+    category: "Eco Blends",
+    image: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Heavy Fleece Streetwear Hoodies",
+    category: "Streetwear",
+    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Premium Combed Pique Polos",
+    category: "Polos",
+    image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Seamless Lounge & Knit Activewear",
+    category: "Activewear",
+    image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Infant Oeko-Tex Romper Range",
+    category: "Kids Wear",
+    image: "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?auto=format&fit=crop&q=80&w=800",
+  },
+  {
+    title: "Sustainable Bamboo fiber Tees",
+    category: "Eco Blends",
+    image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800",
+  },
+];
+
+// Testimonials
+const TESTIMONIALS = [
+  {
+    quote:
+      "The Lotus International has been our primary B2B knitwear manufacturing partner in India for over 8 years. Their consistency in AQL 1.5 standards, organic cotton sourcing, and transparent timelines is outstanding.",
+    author: "Marcello V.",
+    role: "Director of Global Sourcing",
+    company: "Studio Earth (Europe)",
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120",
+    logo: "STUDIO EARTH",
+  },
+  {
+    quote:
+      "Their commitment to ethical labor, solar-powered loops, and 100% GOTS compliance made them the ideal partner for our organic capsule programs. Their sampling speed is the fastest in Tirupur.",
+    author: "Ritu M.",
+    role: "Apparel Procurement Lead",
+    company: "Fabindia",
+    photo: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120",
+    logo: "FABINDIA",
+  },
+  {
+    quote:
+      "Dealing with Lotus means zero worries about compliance audits or shipping slip-ups. Their Sedex 4-Pillar audit scores are top-tier. Truly an enterprise B2B export manufacturer.",
+    author: "S. K. Goel",
+    role: "Managing Director",
+    company: "M.G. Cotton Exports",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120",
+    logo: "M.G. COTTON",
+  },
+];
+
+// FAQ items
+const FAQS = [
+  {
+    q: "What is your minimum order quantity (MOQ)?",
+    a: "Our standard MOQ is 1,000 pieces per style/colorway. For custom eco-blends like bamboo-organic cotton blends under the Nature Polo Club line, we support concessions down to 500 pieces per colorway.",
+  },
+  {
+    q: "How long does the sampling process take?",
+    a: "Standard fit and prototype samples take 7 to 10 business days post tech-pack approval. Lab dips for Pantone color matching take 5 business days. Sampling costs are fully credited against bulk order invoices.",
+  },
+  {
+    q: "What certifications do your manufacturing plants hold?",
+    a: "Our facility is Sedex 4-Pillar audited (Labor, Ethics, Environment, Health & Safety). We are certified for GOTS (Global Organic Textile Standard), OEKO-TEX Standard 100, and ISO 9001:2015 for quality management systems.",
+  },
+  {
+    q: "Are your facilities fully sustainable?",
+    a: "Yes. 100% of our floor operations run on captive solar energy arrays. We also operate a Zero Liquid Discharge (ZLD) RO plant that recycles 95% of our waste water back into the facility loops.",
+  },
+  {
+    q: "Can you assist with shipping and customs clearance?",
+    a: "Absolutely. We offer complete FOB (Free on Board) or CIF shipping terms. We regularly consolidate shipping containers via Chennai and Tuticorin ports, or airfreight via Bangalore for express programs.",
+  },
+];
+
+export default function HomePage() {
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [activePortfolioFilter, setActivePortfolioFilter] = useState("All");
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+
+  // Portfolio filters list
+  const portfolioFilters = ["All", "Eco Blends", "Streetwear", "Polos", "Activewear", "Kids Wear"];
+
+  const filteredPortfolio =
+    activePortfolioFilter === "All"
+      ? PORTFOLIO_PROJECTS
+      : PORTFOLIO_PROJECTS.filter((p) => p.category === activePortfolioFilter);
+
+  const nextTestimonial = () => {
+    setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+  };
+
+  const prevTestimonial = () => {
+    setActiveTestimonial((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="page-transition bg-brand-bg text-brand-ink">
+
+      {/* 1. HERO SECTION */}
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-brand-ink rounded-b-[2rem] md:rounded-b-[3.5rem] shadow-xl">
+        {/* Parallax Video Background */}
+        <HeroParallaxBackground className="absolute inset-0 z-0 opacity-20">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover scale-105"
+            poster="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&q=80&w=1600"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <source
+              src="https://lotusinternationaltextiles.com/static/images/frontend/hero_banner/home/home_hero.mp4"
+              type="video/mp4"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </video>
+        </HeroParallaxBackground>
+
+        {/* Ambient glowing blobs with inverse parallax */}
+        <ParallaxElement speed={-0.4} className="absolute -top-40 -left-40 w-96 h-96 bg-brand-accent/20 rounded-full blur-3xl pointer-events-none" />
+        <ParallaxElement speed={0.5} className="absolute -bottom-40 -right-40 w-96 h-96 bg-brand-sage/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="w-full lg:w-[80%] max-w-7xl mx-auto px-4 sm:px-6 relative z-10 pt-6 md:pt-8 pb-12 md:pb-16 text-center">
+          <div className="space-y-6 md:space-y-8 flex flex-col items-center">
+            
+            <ScrollReveal delay={0.1}>
+              <ParallaxElement speed={0.1}>
+                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-accent/40 bg-brand-accent/20 text-xs font-bold tracking-widest text-brand-accent uppercase shadow-sm">
+                  <Sparkles className="w-4 h-4" /> High-End Garment Exports • Est. 2004
+                </span>
+              </ParallaxElement>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2}>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif-heading leading-[1.15] tracking-tight text-white">
+                Your Manufacturing Partner <br />
+                <span className="text-brand-accent italic font-bold">From Design To Delivery</span>
+              </h1>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.3}>
+              <p className="text-base md:text-lg text-white/90 max-w-3xl mx-auto leading-relaxed font-medium">
+                We are a premier private-label knitwear manufacturer in Tirupur, India.
+                Specializing in OEM clothing manufacturing, certified organic fabrics,
+                and high-density streetwear. Powered by 100% solar operations, exporting worldwide.
+              </p>
+            </ScrollReveal>
+
+            {/* Tag badges */}
+            <ScrollReveal delay={0.35} className="flex flex-wrap justify-center gap-2.5 max-w-3xl mx-auto">
+              {["Clothing Manufacturing", "OEM Specialist", "Private Label", "Bulk Production", "Worldwide Shipping"].map(
+                (tag, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-semibold text-white uppercase tracking-wide backdrop-blur-sm"
+                  >
+                    {tag}
+                  </span>
+                )
+              )}
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.4} className="flex flex-wrap justify-center gap-4 items-center pt-4">
+              <Link
+                href="/contact"
+                className="px-8 py-4 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-brand-bg font-bold text-xs tracking-widest uppercase transition-all shadow-xl hover:shadow-brand-accent/30 flex items-center gap-2 group"
+              >
+                <span>Request a Quote</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+
+              <button
+                onClick={() => setIsConsultationOpen(true)}
+                className="px-8 py-4 rounded-xl border border-white/30 hover:border-white hover:bg-white/10 text-white font-bold text-xs tracking-widest uppercase transition-all bg-white/5 flex items-center gap-2"
+              >
+                <Calendar className="w-4 h-4" />
+                <span>Book Consultation</span>
+              </button>
+            </ScrollReveal>
+
+            {/* Sub-banner trust text */}
+            <ScrollReveal delay={0.45} className="pt-2">
+              <div className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-brand-accent/90 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
+                <Award className="w-4 h-4" /> SEDEX 4-PILLAR AUDITED &amp; GOTS CERTIFIED
+              </div>
+            </ScrollReveal>
+
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* 2. TRUST / ACHIEVEMENT SECTION */}
+      <section className="py-16 bg-white relative z-10 -mt-8 mx-6 md:mx-12 rounded-3xl shadow-lg border border-brand-light-grey/40">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-0 divide-y-0 md:divide-x divide-brand-light-grey/60">
+            {TRUST_STATS.map((stat, idx) => (
+              <StatCounter
+                key={idx}
+                end={stat.end}
+                suffix={stat.suffix}
+                label={stat.label}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. LOGO TICKER */}
+      <section className="py-12 overflow-hidden bg-brand-bg opacity-75">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <h3 className="text-center text-[10px] font-bold tracking-[0.25em] uppercase text-brand-grey/85 mb-8">
+            TRUSTED PARTNER & GLOBAL APPAREL BRANDS
+          </h3>
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-60 grayscale contrast-125 hover:grayscale-0 transition-all duration-500">
+            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">U.S. POLO ASSN.</span>
+            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">ARROW</span>
+            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">AEROPOSTALE</span>
+            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">FRENCH CONNECTION</span>
+            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">FABINDIA</span>
+            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">STUDIO EARTH</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. SERVICES SECTION */}
+      <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <ScrollReveal>
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+                Factory Capabilities
+              </span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
+                Our Premium B2B Services
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal delay={0.15}>
+              <p className="text-xs md:text-sm text-brand-grey max-w-xl mx-auto leading-relaxed font-medium">
+                At Lotus, we control yarn loop structures, patterns, custom stitching,
+                finishing, and global clearance logistics under one roof.
+              </p>
+            </ScrollReveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {SERVICES.map((serv, idx) => (
+              <ScrollReveal key={idx} delay={idx * 0.05} className="flex">
+                <div className="group w-full relative overflow-hidden bg-brand-bg/50 hover:bg-brand-ink border border-brand-light-grey/60 hover:border-brand-accent/40 p-6 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between interactive-card min-h-[220px]">
+                  {/* Related Background Image revealed on hover */}
+                  <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden pointer-events-none">
+                    <img
+                      src={serv.image}
+                      alt={serv.title}
+                      className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/95 via-brand-ink/80 to-brand-ink/40" />
+                  </div>
+
+                  {/* Content Layer */}
+                  <div className="relative z-10 space-y-4">
+                    <div className="w-10 h-10 rounded-xl bg-brand-accent/15 group-hover:bg-brand-accent text-brand-accent group-hover:text-white flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-sm [&>svg]:transition-colors [&>svg]:duration-300 group-hover:[&>svg]:text-white">
+                      {serv.icon}
+                    </div>
+                    <h3 className="font-serif-heading text-base md:text-lg font-bold text-brand-ink group-hover:text-white transition-colors duration-300">
+                      {serv.title}
+                    </h3>
+                    <p className="text-[11px] text-brand-grey group-hover:text-white/85 leading-relaxed font-medium transition-colors duration-300">
+                      {serv.desc}
+                    </p>
+                  </div>
+
+                  {/* Bottom Action Badge */}
+                  <div className="relative z-10 pt-4 border-t border-brand-light-grey/40 group-hover:border-white/20 mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-1">
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-brand-accent group-hover:text-amber-300 uppercase tracking-widest">
+                      <span>Explore service</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. MANUFACTURING TIMELINE PROCESS */}
+      <section className="py-24 bg-brand-bg relative overflow-hidden">
+        {/* Decorative Grid Lines */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(31,58,61,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(31,58,61,0.02)_1px,transparent_1px)] [background-size:40px_40px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <ScrollReveal>
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+                Step-by-Step Workflow
+              </span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
+                Our Manufacturing Process
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal delay={0.15}>
+              <p className="text-xs md:text-sm text-brand-grey max-w-xl mx-auto leading-relaxed font-medium">
+                Slick coordination loops ensure we scale production lines from initial sketch parameters to sea freights dispatch.
+              </p>
+            </ScrollReveal>
+          </div>
+
+          {/* Timeline Cards Scrolling Parallax Flow */}
+          <div className="relative">
+            {/* Parallax background watermark */}
+            <ParallaxElement speed={-0.3} className="absolute -top-12 left-1/2 -translate-x-1/2 text-7xl sm:text-8xl lg:text-9xl font-bold font-serif-heading text-brand-ink/[0.03] tracking-widest uppercase pointer-events-none whitespace-nowrap select-none">
+              PRODUCTION FLOW
+            </ParallaxElement>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+              {PROCESS_STEPS.map((step, idx) => (
+                <ScrollReveal key={idx} delay={idx * 0.08} className="flex">
+                  <ProcessParallaxCard index={idx} className="w-full h-full flex">
+                    <div className="group w-full relative bg-white border border-brand-light-grey/80 p-6 rounded-2xl flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-brand-accent/40 transition-all duration-300">
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-3xl md:text-4xl font-serif-heading font-bold text-brand-accent/30 group-hover:text-brand-accent transition-colors block">
+                            {step.num}
+                          </span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-brand-accent/20 group-hover:bg-brand-accent transition-colors" />
+                        </div>
+                        <h4 className="font-serif-heading text-base md:text-lg font-bold text-brand-ink mb-2">
+                          {step.title}
+                        </h4>
+                        <p className="text-xs text-brand-grey leading-relaxed font-medium">
+                          {step.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </ProcessParallaxCard>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. WHY CHOOSE US */}
+      <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <ScrollReveal>
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+                Value Propositions
+              </span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
+                Why Global Brands Partner with Lotus
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal delay={0.15}>
+              <p className="text-xs md:text-sm text-brand-grey max-w-xl mx-auto leading-relaxed font-medium">
+                We combine traditional fabric craftsmanship with clean energy and compliance integrity.
+              </p>
+            </ScrollReveal>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WHY_CHOOSE_US.map((item, idx) => (
+              <ScrollReveal key={idx} delay={idx * 0.06} className="flex">
+                <div className="w-full bg-brand-bg/40 border border-brand-light-grey/60 p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+                  <div className="space-y-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-brand-accent/15 flex items-center justify-center">
+                      {item.icon}
+                    </div>
+                    <h4 className="font-serif-heading text-base font-bold text-brand-ink">
+                      {item.title}
+                    </h4>
+                    <p className="text-[11px] text-brand-grey leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 7. INDUSTRIES WE SERVE */}
+      <section className="py-24 bg-brand-bg relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+            <ScrollReveal>
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+                Apparel Segments
+              </span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
+                Industries We Serve
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal delay={0.15}>
+              <p className="text-xs md:text-sm text-brand-grey max-w-xl mx-auto leading-relaxed font-medium">
+                We deliver retail-ready garment lines across different styles, fabrics, and branding grids.
+              </p>
+            </ScrollReveal>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {INDUSTRIES.map((ind, idx) => (
+              <ScrollReveal key={idx} delay={idx * 0.05} className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-sm border border-brand-light-grey/50">
+                {/* Image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={ind.bgImage}
+                  alt={ind.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 brightness-[0.7] group-hover:brightness-[0.6]"
+                />
+
+                {/* Overlay details */}
+                <div className="absolute inset-0 p-5 flex flex-col justify-end text-brand-bg bg-gradient-to-t from-brand-ink/90 via-brand-ink/20 to-transparent">
+                  <h4 className="font-serif-heading text-base md:text-lg font-bold">
+                    {ind.title}
+                  </h4>
+                  <p className="text-[10px] text-brand-bg/80 leading-normal mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {ind.desc}
+                  </p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 8. FEATURED PROJECTS PORTFOLIO */}
+      <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
+            <div className="space-y-4">
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+                Product Showcases
+              </span>
+              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
+                Featured Programs
+              </h2>
+            </div>
+
+            {/* Filter buttons */}
+            <div className="flex flex-wrap gap-2">
+              {portfolioFilters.map((filt) => (
+                <button
+                  key={filt}
+                  onClick={() => setActivePortfolioFilter(filt)}
+                  className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all uppercase tracking-wider ${activePortfolioFilter === filt
+                      ? "bg-brand-accent text-brand-bg"
+                      : "bg-brand-bg text-brand-ink border border-brand-light-grey hover:bg-brand-light-grey/50"
+                    }`}
+                >
+                  {filt}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Portfolio grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <AnimatePresence mode="popLayout">
+              {filteredPortfolio.map((proj) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4 }}
+                  key={proj.title}
+                  className="group relative aspect-[4/3] rounded-3xl overflow-hidden shadow-sm border border-brand-light-grey/50 bg-brand-bg"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={proj.image}
+                    alt={proj.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 brightness-[0.9] group-hover:brightness-[0.7]"
+                  />
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end text-brand-bg bg-gradient-to-t from-brand-ink/90 via-brand-ink/30 to-transparent">
+                    <span className="text-[9px] font-bold tracking-widest text-brand-accent uppercase mb-1">
+                      {proj.category}
+                    </span>
+                    <h4 className="font-serif-heading text-base md:text-lg font-bold">
+                      {proj.title}
+                    </h4>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 9. CLIENT TESTIMONIALS */}
+      <section className="py-24 bg-brand-bg relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-6 md:px-8 text-center relative z-10">
+
+          <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full mb-6 inline-block">
+            Global Feedback
+          </span>
+
+          {/* Slides Carousel container */}
+          <div className="relative min-h-[300px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTestimonial}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-6 md:space-y-8"
+              >
+                {/* Quotation text */}
+                <p className="font-serif-heading text-xl md:text-2xl lg:text-3xl font-medium text-brand-ink leading-relaxed italic">
+                  &ldquo;{TESTIMONIALS[activeTestimonial].quote}&rdquo;
+                </p>
+
+                {/* Client Avatar details */}
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={TESTIMONIALS[activeTestimonial].photo}
+                    alt={TESTIMONIALS[activeTestimonial].author}
+                    className="w-12 h-12 rounded-full object-cover border border-brand-accent/40"
+                  />
+                  <div>
+                    <h4 className="text-xs font-bold text-brand-ink">
+                      {TESTIMONIALS[activeTestimonial].author}
+                    </h4>
+                    <p className="text-[10px] text-brand-grey font-semibold mt-0.5">
+                      {TESTIMONIALS[activeTestimonial].role}, {TESTIMONIALS[activeTestimonial].company}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Carousel buttons */}
+          <div className="flex justify-center gap-4 mt-10">
+            <button
+              onClick={prevTestimonial}
+              className="p-2.5 rounded-full border border-brand-ink/10 hover:border-brand-accent hover:text-brand-accent transition-colors bg-white shadow-sm"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={nextTestimonial}
+              className="p-2.5 rounded-full border border-brand-ink/10 hover:border-brand-accent hover:text-brand-accent transition-colors bg-white shadow-sm"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 10. PREMIUM ACCORDION FAQ */}
+      <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">
+        <div className="max-w-3xl mx-auto px-6 md:px-8">
+
+          <div className="text-center mb-16 space-y-4">
+            <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+              Common Inquiries
+            </span>
+            <h2 className="font-serif-heading text-2xl md:text-4xl font-bold text-brand-ink">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {FAQS.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  className="border border-brand-light-grey/80 rounded-2xl overflow-hidden bg-brand-bg/35"
+                >
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none"
+                  >
+                    <span className="font-serif-heading text-sm md:text-base font-bold text-brand-ink pr-4">
+                      {faq.q}
+                    </span>
+                    {isOpen ? (
+                      <ChevronUp className="w-4 h-4 text-brand-accent shrink-0" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 text-brand-accent shrink-0" />
+                    )}
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                      >
+                        <div className="px-6 pb-5 pt-1 text-xs text-brand-grey leading-relaxed border-t border-brand-light-grey/30">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 11. FINAL CALL TO ACTION */}
+      <section className="bg-brand-ink text-brand-bg py-24 relative overflow-hidden rounded-t-[2.5rem] md:rounded-t-[4rem] shadow-2xl">
+        <div className="absolute inset-0 opacity-15">
+          <ParallaxImage
+            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200"
+            alt="Organic knitwear products array"
+            speed={0.12}
+          />
+        </div>
+        <div className="max-w-4xl mx-auto px-6 md:px-8 relative z-10 text-center space-y-6 md:space-y-8">
+          <ScrollReveal>
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-accent/30 bg-brand-accent/15 text-[10px] font-bold tracking-widest text-brand-accent uppercase">
+              Attract Global Clients
+            </span>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <h2 className="font-serif-heading text-3xl md:text-5xl font-bold">
+              Ready To Build Your Brand?
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.15}>
+            <p className="text-xs md:text-sm text-brand-bg/80 max-w-xl mx-auto leading-relaxed font-medium">
+              Get direct B2B pricing estimates and sample timelines from our Tirupur operations coordinates within 1 business day.
+            </p>
+          </ScrollReveal>
+          <ScrollReveal delay={0.2} className="flex flex-wrap justify-center gap-4 pt-2">
+            <Link
+              href="/contact"
+              className="px-8 py-4 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-brand-bg font-bold text-xs tracking-wider uppercase transition-colors shadow-lg hover:shadow-brand-accent/20"
+            >
+              Request Quote
+            </Link>
+            <button
+              onClick={() => setIsConsultationOpen(true)}
+              className="px-8 py-4 rounded-xl border border-white/20 hover:border-brand-accent hover:text-brand-accent text-brand-bg font-bold text-xs tracking-wider uppercase transition-all bg-white/5"
+            >
+              Book Consultation
+            </button>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Consultation Scheduling Modal overlay */}
+      <ConsultationModal isOpen={isConsultationOpen} onClose={() => setIsConsultationOpen(false)} />
     </div>
   );
 }
