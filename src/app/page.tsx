@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ParallaxElement, HeroParallaxBackground, ProcessParallaxCard } from "@/components/ParallaxElement";
+import { ParallaxElement, HeroParallaxBackground } from "@/components/ParallaxElement";
+import ManufacturingScrollPin from "@/components/ManufacturingScrollPin";
 import {
   ArrowRight,
   Award,
@@ -561,66 +562,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. MANUFACTURING TIMELINE PROCESS */}
-      <section className="py-24 bg-brand-bg relative overflow-hidden">
-        {/* Decorative Grid Lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(31,58,61,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(31,58,61,0.02)_1px,transparent_1px)] [background-size:40px_40px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
-
-          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <ScrollReveal>
-              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
-                Step-by-Step Workflow
-              </span>
-            </ScrollReveal>
-            <ScrollReveal delay={0.1}>
-              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
-                Our Manufacturing Process
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal delay={0.15}>
-              <p className="text-xs md:text-sm text-brand-grey max-w-xl mx-auto leading-relaxed font-medium">
-                Slick coordination loops ensure we scale production lines from initial sketch parameters to sea freights dispatch.
-              </p>
-            </ScrollReveal>
-          </div>
-
-          {/* Timeline Cards Scrolling Parallax Flow */}
-          <div className="relative">
-            {/* Parallax background watermark */}
-            <ParallaxElement speed={-0.3} className="absolute -top-12 left-1/2 -translate-x-1/2 text-7xl sm:text-8xl lg:text-9xl font-bold font-serif-heading text-brand-ink/[0.03] tracking-widest uppercase pointer-events-none whitespace-nowrap select-none">
-              PRODUCTION FLOW
-            </ParallaxElement>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-              {PROCESS_STEPS.map((step, idx) => (
-                <ScrollReveal key={idx} delay={idx * 0.08} className="flex">
-                  <ProcessParallaxCard index={idx} className="w-full h-full flex">
-                    <div className="group w-full relative bg-white border border-brand-light-grey/80 p-6 rounded-2xl flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-brand-accent/40 transition-all duration-300">
-                      <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-3xl md:text-4xl font-serif-heading font-bold text-brand-accent/30 group-hover:text-brand-accent transition-colors block">
-                            {step.num}
-                          </span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-brand-accent/20 group-hover:bg-brand-accent transition-colors" />
-                        </div>
-                        <h4 className="font-serif-heading text-base md:text-lg font-bold text-brand-ink mb-2">
-                          {step.title}
-                        </h4>
-                        <p className="text-xs text-brand-grey leading-relaxed font-medium">
-                          {step.desc}
-                        </p>
-                      </div>
-                    </div>
-                  </ProcessParallaxCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
+      {/* 5. MANUFACTURING TIMELINE PROCESS — Sticky Scroll Pin */}
+      <ManufacturingScrollPin steps={PROCESS_STEPS} />
 
       {/* 6. WHY CHOOSE US */}
       <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">

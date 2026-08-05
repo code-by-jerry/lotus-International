@@ -7,26 +7,50 @@ import { Menu, X, FileText, ChevronDown, Calendar } from "lucide-react";
 import { useInquiry } from "./InquiryProvider";
 import ConsultationModal from "./ConsultationModal";
 
-const navigationItems = [
+// WePix-style navigation structure with rich submenus
+const navConfig = [
   { name: "Home", href: "/" },
-  { name: "Products", href: "/products" },
-  { name: "Capabilities", href: "/manufacturing" },
-  { name: "Private Label", href: "/private-label" },
+  {
+    name: "About",
+    href: "/about",
+    submenu: [
+      { name: "About Lotus International", href: "/about" },
+      { name: "Quality & Compliance", href: "/compliance" },
+      { name: "Global Clients", href: "/clients" },
+      { name: "Careers", href: "/careers" },
+    ],
+  },
+  {
+    name: "Our Apparel Range",
+    href: "/products",
+    submenu: [
+      { name: "All Products Catalog", href: "/products" },
+      { name: "Private Label Program", href: "/private-label" },
+      { name: "Nature Polo Club", href: "/nature-polo-club" },
+    ],
+  },
+  {
+    name: "Our Manufacturing",
+    href: "/manufacturing",
+    submenu: [
+      { name: "Factory Capabilities", href: "/manufacturing" },
+      { name: "Step-by-Step Process", href: "/#manufacturing-process" },
+    ],
+  },
   { name: "Sustainability", href: "/sustainability" },
-];
-
-const secondaryNavigationItems = [
-  { name: "About Us", href: "/about" },
-  { name: "Quality & Compliance", href: "/compliance" },
-  { name: "Our Clients", href: "/clients" },
-  { name: "Nature Polo Club", href: "/nature-polo-club" },
-  { name: "Careers", href: "/careers" },
-  { name: "Resources", href: "/resources" },
-  { name: "Contact & RFQ", href: "/contact" },
+  {
+    name: "Resources",
+    href: "/resources",
+    submenu: [
+      { name: "Industry Insights", href: "/resources" },
+      { name: "Contact & RFQ", href: "/contact" },
+    ],
+  },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [openMobileSubmenu, setOpenMobileSubmenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const pathname = usePathname();
@@ -38,10 +62,9 @@ export default function Navbar() {
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
           const scrollY = window.scrollY;
-          // Hysteresis threshold to prevent scroll chatter/flicker at boundary
-          if (scrollY > 50) {
+          if (scrollY > 40) {
             setScrolled(true);
-          } else if (scrollY < 20) {
+          } else if (scrollY < 15) {
             setScrolled(false);
           }
           ticking.current = false;
@@ -56,21 +79,26 @@ export default function Navbar() {
 
   useEffect(() => {
     setIsOpen(false);
+    setOpenMobileSubmenu(null);
   }, [pathname]);
+
+  const toggleMobileSubmenu = (name: string) => {
+    setOpenMobileSubmenu(openMobileSubmenu === name ? null : name);
+  };
 
   return (
     <>
-      {/* ─── Fixed Header Outer Wrapper (Prevents CLS & Layout Shift) ─────── */}
+      {/* ─── Fixed Header Outer Wrapper (WePix Sourcing Reference Layout) ─────── */}
       <header className="fixed top-0 left-0 right-0 w-full z-50 pointer-events-none flex justify-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
         <div
           className={`pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex items-center justify-between gap-4 w-full ${
             scrolled
-              ? "mt-3 w-[94%] max-w-7xl rounded-full bg-brand-ink/90 backdrop-blur-xl border border-white/15 shadow-2xl py-2 px-4 sm:px-6 text-white"
-              : "mt-0 max-w-full rounded-none bg-brand-bg/95 backdrop-blur-md border-b border-brand-light-grey/70 py-3.5 px-4 sm:px-6 lg:px-10 text-brand-ink"
+              ? "mt-2.5 w-[96%] max-w-7xl rounded-full bg-brand-ink/90 backdrop-blur-xl border border-white/15 shadow-2xl py-2 px-5 sm:px-8 text-white"
+              : "mt-0 max-w-full rounded-none bg-brand-bg/95 backdrop-blur-md border-b border-brand-light-grey/60 py-3.5 px-6 lg:px-12 text-brand-ink"
           }`}
         >
 
-          {/* ── Left: Brand Logo (GPU Opacity Cross-Fade - Zero Blink) ──── */}
+          {/* ── Left: Brand Logo ──── */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="group relative inline-flex items-center h-9 md:h-10">
               <div className="relative h-9 md:h-10 w-28 sm:w-32 flex items-center">
@@ -79,7 +107,7 @@ export default function Navbar() {
                 <img
                   src="/logo.png"
                   alt="The Lotus International"
-                  className={`absolute inset-0 h-full w-auto object-contain transition-opacity duration-400 ease-in-out group-hover:scale-105 ${
+                  className={`absolute inset-0 h-full w-auto object-contain transition-opacity duration-300 ease-in-out group-hover:scale-105 ${
                     scrolled ? "opacity-0 pointer-events-none" : "opacity-100"
                   }`}
                 />
@@ -88,7 +116,7 @@ export default function Navbar() {
                 <img
                   src="/logo.png"
                   alt="The Lotus International"
-                  className={`absolute inset-0 h-full w-auto object-contain brightness-0 invert transition-opacity duration-400 ease-in-out group-hover:scale-105 ${
+                  className={`absolute inset-0 h-full w-auto object-contain brightness-0 invert transition-opacity duration-300 ease-in-out group-hover:scale-105 ${
                     scrolled ? "opacity-100" : "opacity-0 pointer-events-none"
                   }`}
                 />
@@ -96,81 +124,87 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* ── Center: Desktop Navigation (Zero Layout Shift) ────────── */}
-          <nav className="hidden lg:flex items-center justify-center gap-1 xl:gap-2">
-            {navigationItems.map((item) => {
-              const isActive = pathname === item.href;
+          {/* ── Center: Desktop Navigation (WePix Sourcing Reference Style) ────────── */}
+          <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-7">
+            {navConfig.map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.submenu && item.submenu.some((sub) => sub.href === pathname));
+
+              if (item.submenu) {
+                return (
+                  <div key={item.name} className="relative group py-2">
+                    <Link
+                      href={item.href}
+                      className={`inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200 whitespace-nowrap ${
+                        scrolled
+                          ? isActive
+                            ? "text-brand-accent font-bold"
+                            : "text-white/85 hover:text-white"
+                          : isActive
+                          ? "text-brand-accent font-bold"
+                          : "text-neutral-800 hover:text-brand-accent"
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 opacity-70" />
+                    </Link>
+
+                    {/* Smooth Dropdown Panel */}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out transform group-hover:translate-y-0 -translate-y-1.5 z-50">
+                      <div
+                        className={`w-56 rounded-2xl shadow-2xl py-3 border overflow-hidden transition-all duration-300 ${
+                          scrolled
+                            ? "bg-brand-ink/95 backdrop-blur-2xl border-white/15 text-white"
+                            : "bg-white/95 backdrop-blur-xl border-brand-light-grey/80 text-brand-ink"
+                        }`}
+                      >
+                        {item.submenu.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            className={`block px-5 py-2.5 text-xs font-semibold transition-colors duration-150 ${
+                              scrolled
+                                ? pathname === sub.href
+                                  ? "text-brand-accent bg-white/10 font-bold"
+                                  : "text-white/85 hover:text-white hover:bg-white/10"
+                                : pathname === sub.href
+                                ? "text-brand-accent font-bold bg-brand-light-grey/40"
+                                : "text-neutral-700 hover:bg-brand-light-grey/30 hover:text-brand-accent"
+                            }`}
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <Link
-                  key={item.href}
+                  key={item.name}
                   href={item.href}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-300 whitespace-nowrap ${
+                  className={`text-sm font-semibold transition-colors duration-200 whitespace-nowrap ${
                     scrolled
                       ? isActive
-                        ? "bg-black/60 text-white shadow-inner border border-white/10"
-                        : "text-white/80 hover:text-white hover:bg-white/10"
+                        ? "text-brand-accent font-bold"
+                        : "text-white/85 hover:text-white"
                       : isActive
-                      ? "text-brand-accent bg-brand-light-grey/40 font-bold"
-                      : "text-brand-ink hover:text-brand-accent hover:bg-brand-light-grey/20"
+                      ? "text-brand-accent font-bold"
+                      : "text-neutral-800 hover:text-brand-accent"
                   }`}
                 >
                   {item.name}
                 </Link>
               );
             })}
-
-            {/* Explore CSS Hover Dropdown (Zero JS lag / flickering) */}
-            <div className="relative group py-1">
-              <button
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase transition-all duration-300 whitespace-nowrap ${
-                  secondaryNavigationItems.some((i) => i.href === pathname)
-                    ? scrolled
-                      ? "bg-black/60 text-white border border-white/10"
-                      : "text-brand-accent bg-brand-light-grey/40 font-bold"
-                    : scrolled
-                    ? "text-white/80 group-hover:text-white group-hover:bg-white/10"
-                    : "text-brand-ink group-hover:text-brand-accent group-hover:bg-brand-light-grey/20"
-                }`}
-              >
-                <span>Explore</span>
-                <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
-              </button>
-
-              {/* Dropdown Menu Container */}
-              <div className="absolute left-1/2 -translate-x-1/2 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-250 ease-out transform group-hover:translate-y-0 -translate-y-1 z-50">
-                <div
-                  className={`w-56 rounded-2xl shadow-2xl py-2.5 border overflow-hidden transition-all duration-300 ${
-                    scrolled
-                      ? "bg-brand-ink/95 backdrop-blur-2xl border-white/15 text-white"
-                      : "bg-brand-bg/95 backdrop-blur-md border-brand-light-grey/60 text-brand-ink"
-                  }`}
-                >
-                  {secondaryNavigationItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`block px-4 py-2 text-xs font-semibold transition-colors duration-150 ${
-                        scrolled
-                          ? pathname === item.href
-                            ? "text-brand-accent bg-white/10 font-bold"
-                            : "text-white/85 hover:text-white hover:bg-white/10"
-                          : pathname === item.href
-                          ? "text-brand-accent font-bold bg-brand-light-grey/40"
-                          : "text-brand-ink hover:bg-brand-light-grey/40 hover:text-brand-accent"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
           </nav>
 
-          {/* ── Right: Action Buttons & CTAs ─────────────────────────── */}
-          <div className="flex items-center justify-end gap-2.5 flex-shrink-0">
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-2.5">
+          {/* ── Right: Get Quote CTA & Action Buttons ─────────────────────────── */}
+          <div className="flex items-center justify-end gap-3 flex-shrink-0">
+            <div className="hidden lg:flex items-center gap-3">
               {/* Inquiry Counter Icon */}
               <Link
                 href="/contact"
@@ -178,7 +212,7 @@ export default function Navbar() {
                 className={`relative p-2 rounded-full border transition-all duration-300 ${
                   scrolled
                     ? "border-white/20 text-white hover:bg-white/10"
-                    : "border-brand-ink/15 text-brand-ink hover:border-brand-accent hover:text-brand-accent bg-white/40"
+                    : "border-neutral-300 text-neutral-800 hover:border-brand-accent hover:text-brand-accent bg-white/60"
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -189,39 +223,39 @@ export default function Navbar() {
                 )}
               </Link>
 
-              {/* Book Consultation */}
+              {/* Consultation Button */}
               <button
                 onClick={() => setIsConsultationOpen(true)}
-                className={`px-3.5 py-1.5 text-xs font-semibold tracking-wider uppercase transition-all duration-300 whitespace-nowrap ${
+                className={`px-3.5 py-2 text-xs font-semibold transition-all duration-300 whitespace-nowrap ${
                   scrolled
-                    ? "rounded-full border border-white/20 text-white/90 hover:text-white hover:bg-white/10"
-                    : "rounded-xl border border-brand-ink/15 text-brand-ink hover:border-brand-accent hover:text-brand-accent bg-white/40"
+                    ? "text-white/90 hover:text-white"
+                    : "text-neutral-700 hover:text-brand-accent"
                 }`}
               >
                 Book Consultation
               </button>
 
-              {/* Request a Quote CTA */}
+              {/* Get Quote Pill Button (Matching WePix Sourcing) */}
               <Link
                 href="/contact"
-                className={`px-4 py-2 text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-md whitespace-nowrap ${
+                className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-300 shadow-sm whitespace-nowrap ${
                   scrolled
-                    ? "rounded-full bg-brand-accent hover:bg-brand-accent-hover text-brand-bg hover:shadow-brand-accent/25"
-                    : "rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-brand-bg"
+                    ? "bg-brand-accent hover:bg-brand-accent-hover text-brand-bg hover:shadow-brand-accent/25"
+                    : "bg-[#1A1A1A] hover:bg-brand-accent text-white"
                 }`}
               >
-                Request a Quote
+                Get Quote
               </Link>
             </div>
 
-            {/* Mobile Controls */}
+            {/* Mobile Menu Icon */}
             <div className="flex items-center gap-2 lg:hidden">
               <Link
                 href="/contact"
                 className={`relative p-2 rounded-full border transition-colors duration-300 ${
                   scrolled
                     ? "border-white/20 text-white bg-white/10"
-                    : "border-brand-ink/15 text-brand-ink bg-white/40"
+                    : "border-neutral-300 text-neutral-800 bg-white/60"
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -237,7 +271,7 @@ export default function Navbar() {
                 className={`p-2 rounded-full border transition-colors duration-300 ${
                   scrolled
                     ? "border-white/20 text-white bg-white/10"
-                    : "border-brand-ink/15 text-brand-ink bg-white/40"
+                    : "border-neutral-300 text-neutral-800 bg-white/60"
                 }`}
               >
                 {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -256,117 +290,104 @@ export default function Navbar() {
         />
       )}
 
-      {/* ─── Mobile Drawer Navigation ──────────────────────────────────── */}
+      {/* ─── Mobile Drawer Navigation (Matching WePix Sourcing Mobile Drawer) ─── */}
       <div
-        className={`fixed top-0 bottom-0 right-0 z-50 w-full max-w-xs backdrop-blur-2xl border-l shadow-2xl p-6 flex flex-col justify-between transition-transform duration-300 ease-out lg:hidden ${
-          scrolled
-            ? "bg-brand-ink/95 border-white/15 text-white"
-            : "bg-brand-bg/95 border-brand-light-grey/50 text-brand-ink"
-        } ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 bottom-0 right-0 z-50 w-full max-w-sm bg-white text-neutral-900 border-l shadow-2xl p-6 flex flex-col justify-between transition-transform duration-300 ease-out lg:hidden ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div>
-          {/* Drawer Header */}
-          <div
-            className={`flex items-center justify-between pb-5 border-b ${
-              scrolled ? "border-white/15" : "border-brand-light-grey/80"
-            }`}
-          >
+          {/* Mobile Drawer Header */}
+          <div className="flex items-center justify-between pb-5 border-b border-neutral-200">
             <Link href="/" className="inline-flex" onClick={() => setIsOpen(false)}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.png"
                 alt="The Lotus International"
-                className={`h-8 w-auto object-contain ${scrolled ? "brightness-0 invert" : ""}`}
+                className="h-8 w-auto object-contain"
               />
             </Link>
             <button
               onClick={() => setIsOpen(false)}
-              className={`p-1.5 rounded-full border ${
-                scrolled ? "border-white/20 text-white" : "border-brand-ink/10 text-brand-ink"
-              }`}
+              aria-label="Close menu"
+              className="p-2 rounded-full border border-neutral-200 text-neutral-700 hover:bg-neutral-100"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Drawer Nav Items */}
-          <nav className="flex flex-col gap-4 mt-6">
-            <div
-              className={`text-[9px] tracking-widest font-bold uppercase ${
-                scrolled ? "text-white/50" : "text-brand-grey/60"
-              }`}
-            >
-              Primary
-            </div>
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={`text-sm font-bold tracking-wider uppercase py-0.5 transition-colors ${
-                  pathname === item.href
-                    ? "text-brand-accent font-bold"
-                    : scrolled
-                    ? "text-white"
-                    : "text-brand-ink"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-
-            <div
-              className={`text-[9px] tracking-widest font-bold uppercase mt-4 ${
-                scrolled ? "text-white/50" : "text-brand-grey/60"
-              }`}
-            >
-              Explore More
-            </div>
-            {secondaryNavigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={`text-sm font-bold tracking-wider uppercase py-0.5 transition-colors ${
-                  pathname === item.href
-                    ? "text-brand-accent font-bold"
-                    : scrolled
-                    ? "text-white/80"
-                    : "text-brand-ink"
-                }`}
-              >
-                {item.name}
-              </Link>
+          {/* Mobile Menu List with Dividers */}
+          <nav className="flex flex-col mt-4 divide-y divide-neutral-200">
+            {navConfig.map((item) => (
+              <div key={item.name} className="py-3">
+                {item.submenu ? (
+                  <div>
+                    <button
+                      onClick={() => toggleMobileSubmenu(item.name)}
+                      className="w-full flex items-center justify-between text-base font-semibold text-neutral-800 hover:text-brand-accent transition-colors"
+                    >
+                      <span>{item.name}</span>
+                      <ChevronDown
+                        className={`w-5 h-5 transition-transform duration-300 text-neutral-500 ${
+                          openMobileSubmenu === item.name ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    {openMobileSubmenu === item.name && (
+                      <div className="mt-2 pl-4 flex flex-col gap-2.5 border-l-2 border-brand-accent/30 py-1">
+                        {item.submenu.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={() => setIsOpen(false)}
+                            className={`text-sm font-medium transition-colors ${
+                              pathname === sub.href
+                                ? "text-brand-accent font-bold"
+                                : "text-neutral-600 hover:text-neutral-900"
+                            }`}
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block text-base font-semibold transition-colors ${
+                      pathname === item.href
+                        ? "text-brand-accent font-bold"
+                        : "text-neutral-800 hover:text-brand-accent"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </div>
             ))}
           </nav>
         </div>
 
-        {/* Drawer Bottom CTAs */}
-        <div
-          className={`mt-8 pt-5 border-t space-y-3 ${
-            scrolled ? "border-white/15" : "border-brand-light-grey/80"
-          }`}
-        >
+        {/* Mobile Drawer Bottom Actions */}
+        <div className="pt-6 border-t border-neutral-200 space-y-3">
           <button
             onClick={() => {
               setIsOpen(false);
               setIsConsultationOpen(true);
             }}
-            className={`w-full text-center py-3 rounded-full border font-semibold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2 ${
-              scrolled
-                ? "border-white/20 text-white bg-white/10"
-                : "border-brand-accent/20 text-brand-ink bg-white/40"
-            }`}
+            className="w-full text-center py-3 rounded-full border border-neutral-300 font-semibold text-xs text-neutral-800 hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2"
           >
-            <Calendar className="w-4 h-4" />
+            <Calendar className="w-4 h-4 text-brand-accent" />
             <span>Book Consultation</span>
           </button>
           <Link
             href="/contact"
             onClick={() => setIsOpen(false)}
-            className="block w-full text-center py-3 rounded-full font-bold text-xs tracking-widest uppercase transition-all shadow-md bg-brand-accent hover:bg-brand-accent-hover text-brand-bg"
+            className="block w-full text-center py-3.5 rounded-full font-bold text-xs tracking-wider uppercase transition-all shadow-md bg-[#1A1A1A] hover:bg-brand-accent text-white"
           >
-            Request a Quote
+            Get Quote
           </Link>
         </div>
       </div>
@@ -376,10 +397,3 @@ export default function Navbar() {
     </>
   );
 }
-
-
-
-
-
-
-

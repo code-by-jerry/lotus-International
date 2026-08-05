@@ -25,16 +25,13 @@ export default function Footer() {
           
           {/* Brand Info - Col 1 to 4 */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="flex items-center gap-3">
+            <div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.png"
                 alt="The Lotus International Logo"
-                className="h-8 md:h-10 w-auto object-contain brightness-0 invert"
+                className="h-12 md:h-16 w-auto object-contain brightness-0 invert"
               />
-              <span className="font-serif-heading text-lg md:text-xl font-bold tracking-wide text-brand-bg">
-                The Lotus International
-              </span>
             </div>
             <p className="text-xs text-brand-bg/70 leading-relaxed font-medium">
               Export-grade knitwear garment manufacturers in Tirupur, India. Partnering with global lifestyle brands with a deep focus on sustainability and women&apos;s empowerment.
