@@ -44,88 +44,110 @@ const TRUST_STATS = [
 ];
 
 // Services
+const SERVICE_CATEGORIES = [
+  "All Capabilities",
+  "Design & Sourcing",
+  "Printing & Embellishment",
+  "Dyeing & Finishing",
+  "Branding & Logistics",
+];
+
 const SERVICES = [
   {
-    icon: <Cpu className="w-5 h-5 text-brand-accent" />,
+    icon: <Cpu className="w-4 h-4 text-brand-accent" />,
     title: "Custom Manufacturing",
+    category: "Design & Sourcing",
     desc: "End-to-end knitwear production, custom cutting and sewing patterns designed for your retail specifications.",
     image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/custom%20manufaturing.webp",
   },
   {
-    icon: <Layers className="w-5 h-5 text-brand-accent" />,
+    icon: <Layers className="w-4 h-4 text-brand-accent" />,
     title: "Fabric Sourcing",
+    category: "Design & Sourcing",
     desc: "Direct mill relationships for custom yarn counts, organic cotton, bamboo fibers, and sustainable blends.",
     image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Fabric%20Sourcing.webp",
   },
   {
-    icon: <Scissors className="w-5 h-5 text-brand-accent" />,
+    icon: <Scissors className="w-4 h-4 text-brand-accent" />,
     title: "Pattern Making",
+    category: "Design & Sourcing",
     desc: "Digital 2D/3D CAD patterns with precise measurements to optimize sizing fits and fabric yields.",
     image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Pattern%20Making.webp",
   },
   {
-    icon: <Shirt className="w-5 h-5 text-brand-accent" />,
-    title: "Sampling",
-    desc: "Rapid prototyping and fit sample development, delivering sealed PP counters within 7-10 business days.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Sampling.webp",
-  },
-  {
-    icon: <Printer className="w-5 h-5 text-brand-accent" />,
-    title: "DTF Printing",
-    desc: "Direct-to-Film high-resolution transfers offering stretchability and wash durability for streetwear.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/DTF%20Printing.webp",
-  },
-  {
-    icon: <Palette className="w-5 h-5 text-brand-accent" />,
-    title: "Screen Printing",
-    desc: "Water-based ink prints, plastisol, puff, high-density, discharge, and premium retail finishes.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Screen%20Printing.webp",
-  },
-  {
-    icon: <Sparkles className="w-5 h-5 text-brand-accent" />,
-    title: "Embroidery",
-    desc: "Computerized multi-head embroidery, chenille patches, felt applications, and premium thread logos.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Embroidery.webp",
-  },
-  {
-    icon: <Palette className="w-5 h-5 text-brand-accent" />,
-    title: "Garment Dye",
-    desc: "Eco-certified reactive dyeing, pigment dyeing, tie-dye, cold dye, and enzyme washes.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Garment%20Dyeing.webp",
-  },
-  {
-    icon: <CheckCircle2 className="w-5 h-5 text-brand-accent" />,
-    title: "Finishing",
-    desc: "Heavy steam pressing, thread trimming, metal detection gates, and final AQL 1.5 audits.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Finishing.webp",
-  },
-  {
-    icon: <Package className="w-5 h-5 text-brand-accent" />,
-    title: "Packaging",
-    desc: "Retail-ready tags, UPC barcode labels, price tickets, custom fold templates, and recycled polybags.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Packaging.webp",
-  },
-  {
-    icon: <Award className="w-5 h-5 text-brand-accent" />,
-    title: "Branding",
-    desc: "Custom satin neck labels, tear-away tags, high-density transfer labels, and cardboard paper hangtags.",
-    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Branding.webp",
-  },
-  {
-    icon: <Palette className="w-5 h-5 text-brand-accent" />,
+    icon: <Palette className="w-4 h-4 text-brand-accent" />,
     title: "Graphic Design",
+    category: "Design & Sourcing",
     desc: "Tech-pack preparation, CAD mockup illustration, artwork vectorization, and placement prints setup.",
     image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Graphic%20Design.webp",
   },
   {
-    icon: <Camera className="w-5 h-5 text-brand-accent" />,
+    icon: <Shirt className="w-4 h-4 text-brand-accent" />,
+    title: "Sampling",
+    category: "Printing & Embellishment",
+    desc: "Rapid prototyping and fit sample development, delivering sealed PP counters within 7-10 business days.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Sampling.webp",
+  },
+  {
+    icon: <Printer className="w-4 h-4 text-brand-accent" />,
+    title: "DTF Printing",
+    category: "Printing & Embellishment",
+    desc: "Direct-to-Film high-resolution transfers offering stretchability and wash durability for streetwear.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/DTF%20Printing.webp",
+  },
+  {
+    icon: <Palette className="w-4 h-4 text-brand-accent" />,
+    title: "Screen Printing",
+    category: "Printing & Embellishment",
+    desc: "Water-based ink prints, plastisol, puff, high-density, discharge, and premium retail finishes.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Screen%20Printing.webp",
+  },
+  {
+    icon: <Sparkles className="w-4 h-4 text-brand-accent" />,
+    title: "Embroidery",
+    category: "Printing & Embellishment",
+    desc: "Computerized multi-head embroidery, chenille patches, felt applications, and premium thread logos.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Embroidery.webp",
+  },
+  {
+    icon: <Palette className="w-4 h-4 text-brand-accent" />,
+    title: "Garment Dye",
+    category: "Dyeing & Finishing",
+    desc: "Eco-certified reactive dyeing, pigment dyeing, tie-dye, cold dye, and enzyme washes.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Garment%20Dyeing.webp",
+  },
+  {
+    icon: <CheckCircle2 className="w-4 h-4 text-brand-accent" />,
+    title: "Finishing",
+    category: "Dyeing & Finishing",
+    desc: "Heavy steam pressing, thread trimming, metal detection gates, and final AQL 1.5 audits.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Finishing.webp",
+  },
+  {
+    icon: <Package className="w-4 h-4 text-brand-accent" />,
+    title: "Packaging",
+    category: "Dyeing & Finishing",
+    desc: "Retail-ready tags, UPC barcode labels, price tickets, custom fold templates, and recycled polybags.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Packaging.webp",
+  },
+  {
+    icon: <Award className="w-4 h-4 text-brand-accent" />,
+    title: "Branding",
+    category: "Branding & Logistics",
+    desc: "Custom satin neck labels, tear-away tags, high-density transfer labels, and cardboard paper hangtags.",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Branding.webp",
+  },
+  {
+    icon: <Camera className="w-4 h-4 text-brand-accent" />,
     title: "Product Photography",
+    category: "Branding & Logistics",
     desc: "Studio flat-lays, ghost mannequin catalog shoots, and lifestyle apparel photography for your website launch.",
     image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Product%20Photography.webp",
   },
   {
-    icon: <Globe className="w-5 h-5 text-brand-accent" />,
+    icon: <Globe className="w-4 h-4 text-brand-accent" />,
     title: "Worldwide Shipping",
+    category: "Branding & Logistics",
     desc: "Sea freight via Tuticorin/Chennai, air freight via Bangalore, custom clearances, and door-to-door forwarding.",
     image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Worldwide%20Shipping.webp",
   },
@@ -350,6 +372,7 @@ const FAQS = [
 export default function HomePage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [activePortfolioFilter, setActivePortfolioFilter] = useState("All");
+  const [activeServiceFilter, setActiveServiceFilter] = useState("All Capabilities");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
 
@@ -360,6 +383,11 @@ export default function HomePage() {
     activePortfolioFilter === "All"
       ? PORTFOLIO_PROJECTS
       : PORTFOLIO_PROJECTS.filter((p) => p.category === activePortfolioFilter);
+
+  const filteredServices =
+    activeServiceFilter === "All Capabilities"
+      ? SERVICES
+      : SERVICES.filter((s) => s.category === activeServiceFilter);
 
   const nextTestimonial = () => {
     setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
@@ -511,9 +539,10 @@ export default function HomePage() {
       <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
 
-          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
             <ScrollReveal>
-              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3 py-1 rounded-full">
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3.5 py-1.5 rounded-full">
                 Factory Capabilities
               </span>
             </ScrollReveal>
@@ -530,44 +559,147 @@ export default function HomePage() {
             </ScrollReveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {SERVICES.map((serv, idx) => (
-              <ScrollReveal key={idx} delay={idx * 0.05} className="flex">
-                <div className="group w-full relative overflow-hidden bg-brand-bg/50 hover:bg-brand-ink border border-brand-light-grey/60 hover:border-brand-accent/40 p-6 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between interactive-card min-h-[220px]">
-                  {/* Related Background Image revealed on hover */}
-                  <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden pointer-events-none">
+          {/* Category Filter Tabs */}
+          <ScrollReveal delay={0.2} className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-12">
+            {SERVICE_CATEGORIES.map((cat) => {
+              const count =
+                cat === "All Capabilities"
+                  ? SERVICES.length
+                  : SERVICES.filter((s) => s.category === cat).length;
+              const isActive = activeServiceFilter === cat;
+
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveServiceFilter(cat)}
+                  className={`group px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+                    isActive
+                      ? "bg-brand-ink text-brand-bg shadow-md scale-[1.02]"
+                      : "bg-brand-bg/60 hover:bg-brand-light-grey/60 text-brand-ink/80 border border-brand-light-grey/80 hover:text-brand-ink"
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                      isActive
+                        ? "bg-brand-accent text-white"
+                        : "bg-brand-ink/5 text-brand-grey group-hover:bg-brand-ink/10"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </ScrollReveal>
+
+          {/* Visual Cards Grid (Dynamic 3 / 4 / 3 / 4 Rhythm on 12-Col Grid) */}
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-5 lg:gap-6"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredServices.map((serv, idx) => {
+                const isAll = activeServiceFilter === "All Capabilities";
+                // 3 / 4 / 3 / 4 alternating rhythm for 14 items across a 12-column grid
+                const colSpanClass = !isAll
+                  ? filteredServices.length === 4
+                    ? "lg:col-span-3"
+                    : "lg:col-span-4"
+                  : idx < 3
+                  ? "lg:col-span-4"
+                  : idx < 7
+                  ? "lg:col-span-3"
+                  : idx < 10
+                  ? "lg:col-span-4"
+                  : "lg:col-span-3";
+
+                return (
+                  <motion.div
+                    key={serv.title}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.35, delay: idx * 0.04 }}
+                    onClick={() => setIsConsultationOpen(true)}
+                    className={`group relative aspect-square w-full rounded-2xl md:rounded-3xl overflow-hidden border border-brand-light-grey/70 hover:border-brand-accent/50 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer ${colSpanClass}`}
+                  >
+                    {/* 1:1 Background Image */}
                     <img
                       src={serv.image}
                       alt={serv.title}
-                      className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700 ease-out"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/95 via-brand-ink/80 to-brand-ink/40" />
-                  </div>
 
-                  {/* Content Layer */}
-                  <div className="relative z-10 space-y-4">
-                    <div className="w-10 h-10 rounded-xl bg-brand-accent/15 group-hover:bg-brand-accent text-brand-accent group-hover:text-white flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-sm [&>svg]:transition-colors [&>svg]:duration-300 group-hover:[&>svg]:text-white">
-                      {serv.icon}
+                    {/* Base Gradient (ensures title is legible in resting state) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/85 via-brand-ink/25 to-transparent transition-opacity duration-500" />
+
+                    {/* Hover Dark-to-Transparent Gradient (Bottom to middle) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/95 via-brand-ink/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                    {/* Bottom Content Layer with Icon + Title and Slide-up Details */}
+                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 flex flex-col justify-end z-10 transition-transform duration-500">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-md bg-white/15 backdrop-blur-md flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white border border-white/15 transition-all duration-300 shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:transition-colors group-hover:[&>svg]:text-white">
+                          {serv.icon}
+                        </span>
+                        <h3 className="font-serif-heading text-sm sm:text-base md:text-lg font-bold text-white group-hover:text-brand-accent transition-colors duration-300 drop-shadow-sm">
+                          {serv.title}
+                        </h3>
+                      </div>
+
+                      {/* Sliding Details on Hover */}
+                      <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out">
+                        <div className="overflow-hidden space-y-3 pt-0 group-hover:pt-2.5 transition-all duration-500">
+                          <p className="text-xs text-white/85 leading-relaxed font-normal">
+                            {serv.desc}
+                          </p>
+                          <div className="pt-2 border-t border-white/15 flex items-center">
+                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-accent group-hover:text-amber-300 uppercase tracking-widest transition-colors">
+                              <span>Enquire Service</span>
+                              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <h3 className="font-serif-heading text-base md:text-lg font-bold text-brand-ink group-hover:text-white transition-colors duration-300">
-                      {serv.title}
-                    </h3>
-                    <p className="text-[11px] text-brand-grey group-hover:text-white/85 leading-relaxed font-medium transition-colors duration-300">
-                      {serv.desc}
-                    </p>
-                  </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
 
-                  {/* Bottom Action Badge */}
-                  <div className="relative z-10 pt-4 border-t border-brand-light-grey/40 group-hover:border-white/20 mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-1">
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-brand-accent group-hover:text-amber-300 uppercase tracking-widest">
-                      <span>Explore service</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
+          {/* Bottom Full-Package Banner */}
+          <ScrollReveal delay={0.2} className="mt-14">
+            <div className="rounded-2xl border border-brand-light-grey/80 bg-brand-bg/60 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="space-y-1.5 text-center md:text-left">
+                <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase">
+                  Turnkey OEM Production
+                </span>
+                <h4 className="font-serif-heading text-xl md:text-2xl font-bold text-brand-ink">
+                  Looking for Full-Package Knitwear Manufacturing?
+                </h4>
+                <p className="text-xs text-brand-grey max-w-xl leading-relaxed">
+                  From yarn sourcing & prototyping to Sedex-compliant mass manufacturing and doorstep clearance, our Tirupur facility is equipped to scale your brand.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <button
+                  onClick={() => setIsConsultationOpen(true)}
+                  className="px-6 py-3 rounded-full bg-brand-ink hover:bg-brand-ink/90 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-sm cursor-pointer"
+                >
+                  Book Consultation
+                </button>
+                <Link
+                  href="/contact"
+                  className="px-6 py-3 rounded-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-sm cursor-pointer"
+                >
+                  Request Quote
+                </Link>
+              </div>
+            </div>
+          </ScrollReveal>
 
         </div>
       </section>
