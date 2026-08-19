@@ -49,85 +49,85 @@ const SERVICES = [
     icon: <Cpu className="w-5 h-5 text-brand-accent" />,
     title: "Custom Manufacturing",
     desc: "End-to-end knitwear production, custom cutting and sewing patterns designed for your retail specifications.",
-    image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/custom%20manufaturing.webp",
   },
   {
     icon: <Layers className="w-5 h-5 text-brand-accent" />,
     title: "Fabric Sourcing",
     desc: "Direct mill relationships for custom yarn counts, organic cotton, bamboo fibers, and sustainable blends.",
-    image: "https://images.unsplash.com/photo-1604176354204-9268737828e4?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Fabric%20Sourcing.webp",
   },
   {
     icon: <Scissors className="w-5 h-5 text-brand-accent" />,
     title: "Pattern Making",
     desc: "Digital 2D/3D CAD patterns with precise measurements to optimize sizing fits and fabric yields.",
-    image: "https://images.unsplash.com/photo-1537832816519-689ad163238b?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Pattern%20Making.webp",
   },
   {
     icon: <Shirt className="w-5 h-5 text-brand-accent" />,
     title: "Sampling",
     desc: "Rapid prototyping and fit sample development, delivering sealed PP counters within 7-10 business days.",
-    image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Sampling.webp",
   },
   {
     icon: <Printer className="w-5 h-5 text-brand-accent" />,
     title: "DTF Printing",
     desc: "Direct-to-Film high-resolution transfers offering stretchability and wash durability for streetwear.",
-    image: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/DTF%20Printing.webp",
   },
   {
     icon: <Palette className="w-5 h-5 text-brand-accent" />,
     title: "Screen Printing",
     desc: "Water-based ink prints, plastisol, puff, high-density, discharge, and premium retail finishes.",
-    image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Screen%20Printing.webp",
   },
   {
     icon: <Sparkles className="w-5 h-5 text-brand-accent" />,
     title: "Embroidery",
     desc: "Computerized multi-head embroidery, chenille patches, felt applications, and premium thread logos.",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Embroidery.webp",
   },
   {
     icon: <Palette className="w-5 h-5 text-brand-accent" />,
     title: "Garment Dye",
     desc: "Eco-certified reactive dyeing, pigment dyeing, tie-dye, cold dye, and enzyme washes.",
-    image: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Garment%20Dyeing.webp",
   },
   {
     icon: <CheckCircle2 className="w-5 h-5 text-brand-accent" />,
     title: "Finishing",
     desc: "Heavy steam pressing, thread trimming, metal detection gates, and final AQL 1.5 audits.",
-    image: "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Finishing.webp",
   },
   {
     icon: <Package className="w-5 h-5 text-brand-accent" />,
     title: "Packaging",
     desc: "Retail-ready tags, UPC barcode labels, price tickets, custom fold templates, and recycled polybags.",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Packaging.webp",
   },
   {
     icon: <Award className="w-5 h-5 text-brand-accent" />,
     title: "Branding",
     desc: "Custom satin neck labels, tear-away tags, high-density transfer labels, and cardboard paper hangtags.",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Branding.webp",
   },
   {
     icon: <Palette className="w-5 h-5 text-brand-accent" />,
     title: "Graphic Design",
     desc: "Tech-pack preparation, CAD mockup illustration, artwork vectorization, and placement prints setup.",
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Graphic%20Design.webp",
   },
   {
     icon: <Camera className="w-5 h-5 text-brand-accent" />,
     title: "Product Photography",
     desc: "Studio flat-lays, ghost mannequin catalog shoots, and lifestyle apparel photography for your website launch.",
-    image: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Product%20Photography.webp",
   },
   {
     icon: <Globe className="w-5 h-5 text-brand-accent" />,
     title: "Worldwide Shipping",
     desc: "Sea freight via Tuticorin/Chennai, air freight via Bangalore, custom clearances, and door-to-door forwarding.",
-    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800",
+    image: "https://ik.imagekit.io/wepix/lotus%20international/B2B%20Services/Worldwide%20Shipping.webp",
   },
 ];
 
@@ -486,13 +486,23 @@ export default function HomePage() {
           <h3 className="text-center text-[10px] font-bold tracking-[0.25em] uppercase text-brand-grey/85 mb-8">
             TRUSTED PARTNER & GLOBAL APPAREL BRANDS
           </h3>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 opacity-60 grayscale contrast-125 hover:grayscale-0 transition-all duration-500">
-            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">U.S. POLO ASSN.</span>
-            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">ARROW</span>
-            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">AEROPOSTALE</span>
-            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">FRENCH CONNECTION</span>
-            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">FABINDIA</span>
-            <span className="font-serif-heading text-base md:text-lg font-bold tracking-wider text-brand-ink">STUDIO EARTH</span>
+          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-14">
+            {[
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/us%20polo%20assn.png", alt: "U.S. Polo Assn." },
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/max.png", alt: "Max Fashion" },
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/aeropostale.png", alt: "Aeropostale" },
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/studio%20earth.png", alt: "Studio Earth" },
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/fabrika.png", alt: "Fabrika" },
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/liverpool.png", alt: "Liverpool" },
+              { src: "https://ik.imagekit.io/wepix/lotus%20international/french%20connection.png", alt: "French Connection" },
+            ].map((brand) => (
+              <img
+                key={brand.alt}
+                src={brand.src}
+                alt={brand.alt}
+                className="h-8 md:h-10 w-auto object-contain opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+              />
+            ))}
           </div>
         </div>
       </section>
