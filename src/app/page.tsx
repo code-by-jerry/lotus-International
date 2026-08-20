@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ParallaxElement, HeroParallaxBackground } from "@/components/ParallaxElement";
 import ManufacturingScrollPin from "@/components/ManufacturingScrollPin";
@@ -29,11 +29,96 @@ import {
   UserCheck,
   Percent,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import StatCounter from "@/components/StatCounter";
 import ParallaxImage from "@/components/ParallaxImage";
 import ConsultationModal from "@/components/ConsultationModal";
+
+// Hero animated tags
+const HERO_TAGS = [
+  "Clothing Manufacturing",
+  "OEM Specialist",
+  "Private Label",
+  "Bulk Production",
+  "Worldwide Shipping",
+];
+
+// Single tag rotating typewriter / letter reveal loop component
+function HeroTagRotator() {
+  const [tagIndex, setTagIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTagIndex((prev) => (prev + 1) % HERO_TAGS.length);
+    }, 2800);
+    return () => clearInterval(interval);
+  }, []);
+
+  const activeTag = HERO_TAGS[tagIndex];
+
+  return (
+    <div className="inline-flex items-center justify-center min-h-[46px]">
+      <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 hover:border-brand-accent/50 hover:bg-brand-accent/15 backdrop-blur-md shadow-xl transition-colors duration-300">
+        {/* Pulsing indicator dot */}
+        <span className="relative flex h-2.5 w-2.5 shrink-0">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-accent"></span>
+        </span>
+
+        <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest shrink-0">
+          Core Expertise:
+        </span>
+
+        {/* Animated Letter Reveal for the active tag */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTag}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.25 }}
+            className="flex items-center"
+          >
+            <motion.span
+              className="font-bold text-xs md:text-sm text-white uppercase tracking-wider flex whitespace-nowrap"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.035,
+                  },
+                },
+              }}
+              initial="hidden"
+              animate="visible"
+            >
+              {activeTag.split("").map((char, i) => (
+                <motion.span
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, y: 4, filter: "blur(3px)" },
+                    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+                  }}
+                  transition={{ duration: 0.15 }}
+                  className="inline-block"
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              ))}
+            </motion.span>
+            <motion.span
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ repeat: Infinity, duration: 0.75 }}
+              className="inline-block w-0.5 h-3.5 bg-brand-accent ml-1.5 shrink-0"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
 
 // Trust stats
 const TRUST_STATS = [
@@ -449,18 +534,9 @@ export default function HomePage() {
               </p>
             </ScrollReveal>
 
-            {/* Tag badges */}
-            <ScrollReveal delay={0.35} className="flex flex-wrap justify-center gap-2.5 max-w-3xl mx-auto">
-              {["Clothing Manufacturing", "OEM Specialist", "Private Label", "Bulk Production", "Worldwide Shipping"].map(
-                (tag, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-semibold text-white uppercase tracking-wide backdrop-blur-sm"
-                  >
-                    {tag}
-                  </span>
-                )
-              )}
+            {/* Dynamic Rotating Tag (One-by-One Loop Reveal) */}
+            <ScrollReveal delay={0.35}>
+              <HeroTagRotator />
             </ScrollReveal>
 
             <ScrollReveal delay={0.4} className="flex flex-wrap justify-center gap-4 items-center pt-4">
@@ -493,9 +569,9 @@ export default function HomePage() {
       </section>
 
       {/* 2. TRUST / ACHIEVEMENT SECTION */}
-      <section className="py-16 bg-white relative z-10 -mt-8 mx-6 md:mx-12 rounded-3xl shadow-lg border border-brand-light-grey/40">
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-0 divide-y-0 md:divide-x divide-brand-light-grey/60">
+      <section className="py-5 sm:py-8 md:py-14 bg-white relative z-10 -mt-5 sm:-mt-8 mx-4 sm:mx-6 md:mx-12 rounded-2xl md:rounded-3xl shadow-md md:shadow-lg border border-brand-light-grey/50">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 md:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-2 md:gap-0 divide-y-0 md:divide-x divide-brand-light-grey/60">
             {TRUST_STATS.map((stat, idx) => (
               <StatCounter
                 key={idx}
@@ -536,170 +612,122 @@ export default function HomePage() {
       </section>
 
       {/* 4. SERVICES SECTION */}
-      <section className="py-24 bg-white border-t border-b border-brand-light-grey/50">
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
+      <section className="py-20 md:py-28 bg-white border-t border-b border-brand-light-grey/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
 
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14 space-y-4">
             <ScrollReveal>
-              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 px-3.5 py-1.5 rounded-full">
+              <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase bg-brand-accent/10 border border-brand-accent/20 px-3.5 py-1.5 rounded-full inline-block">
                 Factory Capabilities
               </span>
             </ScrollReveal>
             <ScrollReveal delay={0.1}>
-              <h2 className="font-serif-heading text-3xl md:text-5xl font-bold text-brand-ink">
+              <h2 className="font-serif-heading text-3xl sm:text-4xl md:text-5xl font-bold text-brand-ink">
                 Our Premium B2B Services
               </h2>
             </ScrollReveal>
             <ScrollReveal delay={0.15}>
-              <p className="text-xs md:text-sm text-brand-grey max-w-xl mx-auto leading-relaxed font-medium">
+              <p className="text-xs md:text-sm text-brand-grey max-w-2xl mx-auto leading-relaxed font-medium">
                 At Lotus, we control yarn loop structures, patterns, custom stitching,
-                finishing, and global clearance logistics under one roof.
+                finishing, and global clearance logistics under one roof in Tirupur.
               </p>
             </ScrollReveal>
           </div>
 
-          {/* Category Filter Tabs */}
-          <ScrollReveal delay={0.2} className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-12">
-            {SERVICE_CATEGORIES.map((cat) => {
-              const count =
-                cat === "All Capabilities"
-                  ? SERVICES.length
-                  : SERVICES.filter((s) => s.category === cat).length;
-              const isActive = activeServiceFilter === cat;
+          {/* Category Filter Tabs (Responsive with smooth horizontal scroll on mobile) */}
+          <ScrollReveal delay={0.2} className="mb-10 md:mb-12">
+            <div className="flex items-center justify-start md:justify-center gap-2 md:gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+              {SERVICE_CATEGORIES.map((cat) => {
+                const count =
+                  cat === "All Capabilities"
+                    ? SERVICES.length
+                    : SERVICES.filter((s) => s.category === cat).length;
+                const isActive = activeServiceFilter === cat;
 
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setActiveServiceFilter(cat)}
-                  className={`group px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 cursor-pointer ${
-                    isActive
-                      ? "bg-brand-ink text-brand-bg shadow-md scale-[1.02]"
-                      : "bg-brand-bg/60 hover:bg-brand-light-grey/60 text-brand-ink/80 border border-brand-light-grey/80 hover:text-brand-ink"
-                  }`}
-                >
-                  <span>{cat}</span>
-                  <span
-                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveServiceFilter(cat)}
+                    className={`group px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer ${
                       isActive
-                        ? "bg-brand-accent text-white"
-                        : "bg-brand-ink/5 text-brand-grey group-hover:bg-brand-ink/10"
+                        ? "bg-brand-ink text-brand-bg shadow-sm"
+                        : "bg-brand-bg/80 hover:bg-brand-light-grey/60 text-brand-ink/75 border border-brand-light-grey/80 hover:text-brand-ink"
                     }`}
                   >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
+                    <span>{cat}</span>
+                    <span
+                      className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                        isActive
+                          ? "bg-brand-accent text-white"
+                          : "bg-brand-ink/5 text-brand-grey group-hover:bg-brand-ink/10"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </ScrollReveal>
 
-          {/* Visual Cards Grid (Dynamic 3 / 4 / 3 / 4 Rhythm on 12-Col Grid) */}
+          {/* Clean, Uniform Grid */}
           <motion.div
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-5 lg:gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
           >
             <AnimatePresence mode="popLayout">
               {filteredServices.map((serv, idx) => {
-                const isAll = activeServiceFilter === "All Capabilities";
-                // 3 / 4 / 3 / 4 alternating rhythm for 14 items across a 12-column grid
-                const colSpanClass = !isAll
-                  ? filteredServices.length === 4
-                    ? "lg:col-span-3"
-                    : "lg:col-span-4"
-                  : idx < 3
-                  ? "lg:col-span-4"
-                  : idx < 7
-                  ? "lg:col-span-3"
-                  : idx < 10
-                  ? "lg:col-span-4"
-                  : "lg:col-span-3";
-
                 return (
                   <motion.div
                     key={serv.title}
                     layout
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.35, delay: idx * 0.04 }}
+                    transition={{ duration: 0.35, delay: idx * 0.03 }}
                     onClick={() => setIsConsultationOpen(true)}
-                    className={`group relative aspect-square w-full rounded-2xl md:rounded-3xl overflow-hidden border border-brand-light-grey/70 hover:border-brand-accent/50 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer ${colSpanClass}`}
+                    className="group cursor-pointer flex flex-col"
                   >
-                    {/* 1:1 Background Image */}
-                    <img
-                      src={serv.image}
-                      alt={serv.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                    />
+                    {/* 1:1 Square Image Container */}
+                    <div className="relative aspect-square w-full rounded-2xl md:rounded-3xl overflow-hidden bg-brand-light-grey/20">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={serv.image}
+                        alt={serv.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                      
+                      {/* Subtle resting vignette */}
+                      <div className="absolute inset-0 bg-brand-ink/5 group-hover:bg-transparent transition-colors duration-300" />
 
-                    {/* Base Gradient (ensures title is legible in resting state) */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/85 via-brand-ink/25 to-transparent transition-opacity duration-500" />
+                      {/* Hover Slide-up Description at Image Bottom */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 bg-gradient-to-t from-brand-ink/95 via-brand-ink/80 to-transparent backdrop-blur-[2px] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-10">
+                        <p className="text-xs text-white/95 leading-relaxed font-normal line-clamp-3">
+                          {serv.desc}
+                        </p>
+                      </div>
+                    </div>
 
-                    {/* Hover Dark-to-Transparent Gradient (Bottom to middle) */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/95 via-brand-ink/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                    {/* Bottom Content Layer with Icon + Title and Slide-up Details */}
-                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-5 flex flex-col justify-end z-10 transition-transform duration-500">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-md bg-white/15 backdrop-blur-md flex items-center justify-center text-brand-accent group-hover:bg-brand-accent group-hover:text-white border border-white/15 transition-all duration-300 shrink-0 [&>svg]:w-3.5 [&>svg]:h-3.5 [&>svg]:transition-colors group-hover:[&>svg]:text-white">
+                    {/* Title with clean icon placed below the image */}
+                    <div className="pt-3.5 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-brand-accent shrink-0 [&>svg]:w-4.5 [&>svg]:h-4.5">
                           {serv.icon}
                         </span>
-                        <h3 className="font-serif-heading text-sm sm:text-base md:text-lg font-bold text-white group-hover:text-brand-accent transition-colors duration-300 drop-shadow-sm">
+                        <h3 className="font-serif-heading text-lg sm:text-xl font-bold text-brand-ink group-hover:text-brand-accent transition-colors duration-300 leading-snug">
                           {serv.title}
                         </h3>
                       </div>
-
-                      {/* Sliding Details on Hover */}
-                      <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out">
-                        <div className="overflow-hidden space-y-3 pt-0 group-hover:pt-2.5 transition-all duration-500">
-                          <p className="text-xs text-white/85 leading-relaxed font-normal">
-                            {serv.desc}
-                          </p>
-                          <div className="pt-2 border-t border-white/15 flex items-center">
-                            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-accent group-hover:text-amber-300 uppercase tracking-widest transition-colors">
-                              <span>Enquire Service</span>
-                              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                      <span className="text-brand-ink/40 group-hover:text-brand-accent transition-colors duration-300 shrink-0">
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      </span>
                     </div>
                   </motion.div>
                 );
               })}
             </AnimatePresence>
           </motion.div>
-
-          {/* Bottom Full-Package Banner */}
-          <ScrollReveal delay={0.2} className="mt-14">
-            <div className="rounded-2xl border border-brand-light-grey/80 bg-brand-bg/60 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="space-y-1.5 text-center md:text-left">
-                <span className="text-[10px] font-bold tracking-widest text-brand-accent uppercase">
-                  Turnkey OEM Production
-                </span>
-                <h4 className="font-serif-heading text-xl md:text-2xl font-bold text-brand-ink">
-                  Looking for Full-Package Knitwear Manufacturing?
-                </h4>
-                <p className="text-xs text-brand-grey max-w-xl leading-relaxed">
-                  From yarn sourcing & prototyping to Sedex-compliant mass manufacturing and doorstep clearance, our Tirupur facility is equipped to scale your brand.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <button
-                  onClick={() => setIsConsultationOpen(true)}
-                  className="px-6 py-3 rounded-full bg-brand-ink hover:bg-brand-ink/90 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-sm cursor-pointer"
-                >
-                  Book Consultation
-                </button>
-                <Link
-                  href="/contact"
-                  className="px-6 py-3 rounded-full bg-brand-accent hover:bg-brand-accent-hover text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-sm cursor-pointer"
-                >
-                  Request Quote
-                </Link>
-              </div>
-            </div>
-          </ScrollReveal>
 
         </div>
       </section>
